@@ -610,9 +610,77 @@ function init()
   
 -- adding inputs to softcut volume controls
 
-
+-- exposing encoder params to be remapped to midi ccs
   
 
+  params:add_group("Enc Remaps",6)
+
+  params:add{
+    type = "number",
+    id = "buffSpeed",
+    name = "Buffer Playback Speed",
+    min = 1,
+    max = 100,
+    default = 50,
+    formatter = function(param) return (param:get().." %") end,
+    action = function() buffSpeedParam() end
+  }
+  
+  params:add{
+    type = "number",
+    id = "synFilt",
+    name = "Synth Filter",
+    min = 1,
+    max = 100,
+    default = 1,
+    formatter = function(param) return (param:get()/100) end,
+    action = function() synFiltParam() end
+  }
+
+    params:add{
+    type = "number",
+    id = "buffFilt",
+    name = "Buffer Filter Cutoff",
+    min = 1,
+    max = 100,
+    default = 50,
+    formatter = function(param) return (param:get().." %") end,
+    action = function() buffFiltParam() end
+  }
+
+
+    params:add{
+    type = "number",
+    id = "buffAmp",
+    name = "Buffer Amplitude",
+    min = 1,
+    max = 100,
+    default = 50,
+    formatter = function(param) return (param:get().." %") end,
+    action = function() buffAmpParam() end
+  }
+
+    params:add{
+    type = "number",
+    id = "buffRec",
+    name = "Buffer Record Amplitude",
+    min = 1,
+    max = 100,
+    default = 50,
+    formatter = function(param) return (param:get().." %") end,
+    action = function() buffRecParam() end
+  }
+
+    params:add{
+    type = "number",
+    id = "buffErase",
+    name = "Buffer Erase Factor",
+    min = 1,
+    max = 100,
+    default = 50,
+    formatter = function(param) return (param:get().." %") end,
+    action = function() buffEraseParam() end
+  }
   
   --build_scale() -- builds initial scale
   build_Root(params:get("rootFreq"))
@@ -635,6 +703,29 @@ function init()
     --columns = 0
   end
 end
+
+function test()
+end
+
+function buffSpeedParam()
+end
+
+function synFiltParam()
+  rq = (params:get("synFilt") )/100
+end
+
+function buffFiltParam()
+end
+
+function buffAmpParam()
+end
+
+function buffRecParam()
+end
+
+function buffEraseParam()
+end
+
 
 function initKB()
   g:led(13 - XoffSet,1,15)
@@ -1345,5 +1436,3 @@ function key(n,z)
   
   
 end
-
-
