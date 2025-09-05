@@ -89,7 +89,7 @@ end
 vol = 1
 rec = 1.0
 pre = 0.8
-rte = 1
+rte = 0.75
 rteOff = 0
 rteQuant = 1.0
 newRate = 1.0
@@ -610,10 +610,12 @@ function init()
   
 -- adding inputs to softcut volume controls
 
--- exposing encoder params to be remapped to midi ccs
+-- exposing params only controllable via the encoders
+-- so that they can be mapped to a midi controller
+-- (in the case of bum encoders)
   
 
-  params:add_group("Enc Remaps",6)
+  params:add_group("Enc Remaps",5)
 
   params:add{
     type = "number",
@@ -621,7 +623,7 @@ function init()
     name = "Buffer Playback Speed",
     min = 1,
     max = 100,
-    default = 50,
+    default = 75,
     formatter = function(param) return (param:get().." %") end,
     action = function() buffSpeedParam() end
   }
@@ -637,16 +639,18 @@ function init()
     action = function() synFiltParam() end
   }
 
-    params:add{
-    type = "number",
-    id = "buffFilt",
-    name = "Buffer Filter Cutoff",
-    min = 1,
-    max = 100,
-    default = 50,
-    formatter = function(param) return (param:get().." %") end,
-    action = function() buffFiltParam() end
-  }
+
+-- not quite sure how to expose the buffer filter cutoff
+  --   params:add{
+  --   type = "number",
+  --   id = "buffFilt",
+  --   name = "Buffer Filter Cutoff",
+  --   min = root[1],
+  --   max = filtMax,
+  --   default = 1245,
+  --   formatter = function(param) return (param:get().." Hz") end,
+  --   action = function() buffFiltParam() end
+  -- }
 
 
     params:add{
@@ -655,7 +659,7 @@ function init()
     name = "Buffer Amplitude",
     min = 1,
     max = 100,
-    default = 50,
+    default = 100,
     formatter = function(param) return (param:get().." %") end,
     action = function() buffAmpParam() end
   }
@@ -666,7 +670,7 @@ function init()
     name = "Buffer Record Amplitude",
     min = 1,
     max = 100,
-    default = 50,
+    default = 80,
     formatter = function(param) return (param:get().." %") end,
     action = function() buffRecParam() end
   }
@@ -674,10 +678,10 @@ function init()
     params:add{
     type = "number",
     id = "buffErase",
-    name = "Buffer Erase Factor",
+    name = "Buffer Preserve Factor",
     min = 1,
     max = 100,
-    default = 50,
+    default = 75,
     formatter = function(param) return (param:get().." %") end,
     action = function() buffEraseParam() end
   }
@@ -704,26 +708,28 @@ function init()
   end
 end
 
-function test()
-end
-
 function buffSpeedParam()
+  rte = (params:get("buffSpeed") )/100
 end
 
 function synFiltParam()
   rq = (params:get("synFilt") )/100
 end
 
-function buffFiltParam()
-end
+-- function buffFiltParam()
+--   newLow = (params:get("buffFilt") )*10
+-- end
 
 function buffAmpParam()
+  vol = (params:get("buffAmp") )/100
 end
 
 function buffRecParam()
+  rec = (params:get("buffRec") )/100
 end
 
 function buffEraseParam()
+  pre = (params:get("buffErase") )/100
 end
 
 
